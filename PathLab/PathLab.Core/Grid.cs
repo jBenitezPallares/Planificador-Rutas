@@ -16,7 +16,7 @@ public class Grid
     public IEnumerable<Point> GetNeighbors(Point point, MovementMode mode)
     {
         List<Point> neighbors = new List<Point>();
-        foreach ((int rowStep, int columnStep) in GetOffsets(mode))
+        foreach ((int rowStep, int columnStep) in MovementModeExtensions.GetOffsets(mode))
         {
             Point candidate = new Point(point.Row + rowStep, point.Column + columnStep);
             if (Contains(candidate) && GetCellType(candidate) != CellType.Wall)
@@ -46,20 +46,4 @@ public class Grid
             _grid[point.Row, point.Column] = cell;
         }
     }
-    
-    private static (int Row, int Column)[] GetOffsets(MovementMode mode) => mode switch
-    {
-        MovementMode.FourDirections => FourDirectionOffsets,
-        MovementMode.EightDirections => EightDirectionOffsets,
-        _ => throw new ArgumentOutOfRangeException(nameof(mode))
-    };
-    private static readonly (int row, int column)[] FourDirectionOffsets =
-    {
-        (0, 1), (1, 0), (0, -1), (-1, 0)
-    };
-
-    private static readonly (int row, int column)[] EightDirectionOffsets =
-    {
-        (-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)
-    };
 }

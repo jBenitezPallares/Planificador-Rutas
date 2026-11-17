@@ -38,6 +38,14 @@ public class Grid
     {
         return _grid[point.Row, point.Column];
     }
+
+    public void SetCell(Point point, CellType cell)
+    {
+        if (Contains(point))
+        {
+            _grid[point.Row, point.Column] = cell;
+        }
+    }
     
     private static (int Row, int Column)[] GetOffsets(MovementMode mode) => mode switch
     {

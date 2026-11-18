@@ -116,7 +116,23 @@ public abstract class PathFinderContractTests
 
         Assert.IsGreaterThanOrEqualTo(0, result.ElapsedMs);
     }
-    
+
+    [TestMethod]
+    public void Find_PathCost_MatchesSumOfCellCosts()
+    {
+        Grid grid = BuildHandMadeMap();
+        grid.SetCell(new Point(0, 1), CellType.Mud);
+        grid.SetCell(new Point(2, 2), CellType.Water);
+        grid.SetCell(new Point(2, 3), CellType.Mud);
+        IPathFinder finder = CreateFinder(MovementMode.FourDirections);
+
+        SearchResult result = finder.Find(grid, new Point(0, 0), new Point(3, 4));
+
+        Assert.IsTrue(result.Found);
+        double expectedCost = result.Path.Skip(1).Sum(point => grid.GetCost(point));
+        Assert.AreEqual(expectedCost, result.Cost);
+    }
+
     protected static Grid BuildHandMadeMap()
     {
         Grid grid = new Grid(5, 4);

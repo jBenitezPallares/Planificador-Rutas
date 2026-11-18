@@ -1,19 +1,16 @@
 ﻿namespace PathLab.Core;
 
 public class Grid
-
 {
-    private readonly int _width;
-    private readonly int _height;
     private readonly CellType[,] _grid;
 
-    public int Width => _width;
-    public int  Height => _height;
+    public int Width { get; }
+    public int Height { get; }
 
     public Grid(int width, int height)
     {
-        _width = width;
-        _height = height;
+        Width = width;
+        Height = height;
         _grid = new CellType[height, width];
     }
 
@@ -33,7 +30,7 @@ public class Grid
 
     private bool Contains(Point point)
     {
-        if (point.Row < 0 || point.Row >= _height || point.Column < 0 || point.Column >= _width) 
+        if (point.Row < 0 || point.Row >= Height || point.Column < 0 || point.Column >= Width)
             return false;
         return true;
     }

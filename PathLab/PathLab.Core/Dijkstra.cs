@@ -13,6 +13,12 @@ public class Dijkstra: IPathFinder
 
     public SearchResult Find(Grid grid, Point start, Point goal)
     {
+        if (!grid.Contains(start))
+            throw new ArgumentOutOfRangeException(nameof(start), start, "El punto de inicio está fuera de la grilla");
+
+        if (!grid.Contains(goal))
+            throw new ArgumentOutOfRangeException(nameof(goal), goal, "El punto de destino está fuera de la grilla");
+        
         Stopwatch stopwatch = Stopwatch.StartNew();
         List<Point> explored = new List<Point>();
         if (grid.IsWall(start) || grid.IsWall(goal))

@@ -28,7 +28,7 @@ public class Grid
         return neighbors;
     }
 
-    private bool Contains(Point point)
+    public bool Contains(Point point)
     {
         if (point.Row < 0 || point.Row >= Height || point.Column < 0 || point.Column >= Width)
             return false;

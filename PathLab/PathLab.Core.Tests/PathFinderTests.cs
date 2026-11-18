@@ -129,4 +129,29 @@ public class PathFinderTests
         Assert.AreEqual(0, result.Cost);
         Assert.IsEmpty(result.Path);
     }
+
+    [TestMethod]
+    public void Find_StartOutsideGrid_ThrowsException()
+    {
+        Grid grid = new Grid(5,4);
+        
+        IPathFinder finder = new Dijkstra(MovementMode.EightDirections);
+
+        ArgumentOutOfRangeException exception = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => finder.Find(grid, new Point(6, 6), new Point(3, 4)));
+
+        Assert.AreEqual("start", exception.ParamName);
+    }
+    
+    [TestMethod]
+    public void Find_GoalOutsideGrid_ThrowsException(){
+        Grid grid = new Grid(5,4);
+        
+        IPathFinder finder = new Dijkstra(MovementMode.EightDirections);
+
+        ArgumentOutOfRangeException exception = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => finder.Find(grid, new Point(0, 0), new Point(6, 6)));
+
+        Assert.AreEqual("goal", exception.ParamName);
+    }
 }

@@ -174,6 +174,49 @@ public class GridTests
             new Point(0, 1), new Point(1, 0), new Point(1, 2), new Point(2, 1));
     }
 
+    [TestMethod]
+    public void GetCost_PointOutsideGrid_ThrowsException()
+    {
+        Grid grid = new(3, 3);
+
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => grid.GetCost(new Point(3, 0)));
+    }
+
+    [TestMethod]
+    public void IsWall_PointOutsideGrid_ThrowsException()
+    {
+        Grid grid = new(3, 3);
+
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => grid.IsWall(new Point(0, -1)));
+    }
+
+    [TestMethod]
+    public void GetNeighbors_EightDirectionsWithTwoWallsAroundDiagonal_DoesNotCutCorner()
+    {
+        Grid grid = new(3, 3);
+        grid.SetCell(new Point(1, 2), CellType.Wall);
+        grid.SetCell(new Point(2,1), CellType.Wall);
+        
+        AssertNeighbors(
+            grid, 
+            new Point(1, 1), 
+            MovementMode.EightDirections, 
+            new Point(0,0), new Point(0,1), new Point(1,0), new Point(0,2), new Point(2,0));
+    }
+
+    [TestMethod]
+    public void GetNeighbors_EightDirectionsWithOneWallBesideDiagonal_StillReturnsDiagonal()
+    {
+        Grid grid = new(3, 3);
+        grid.SetCell(new Point(1, 2), CellType.Wall);
+        
+        AssertNeighbors(
+            grid, 
+            new Point(1, 1), 
+            MovementMode.EightDirections, 
+            new Point(0,0), new Point(0,1), new Point(1,0), new Point(2,0), new Point(0,2), new Point(2,1), new Point(2,2));
+    }
+
     private static void AssertNeighbors(Grid grid, Point point, MovementMode mode, params Point[] expected)
     {
         List<Point> neighbors = grid.GetNeighbors(point, mode).ToList();

@@ -4,7 +4,6 @@ namespace PathLab.Core;
 
 public class Dijkstra: IPathFinder
 {
-    private const double DiagonalFactor = 1.414;
     private readonly MovementMode _movementMode;
 
     public Dijkstra(MovementMode movementMode)
@@ -18,7 +17,7 @@ public class Dijkstra: IPathFinder
         List<Point> explored = new List<Point>();
         if (grid.IsWall(start) || grid.IsWall(goal))
         {
-            return new SearchResult(false, new List<Point>(), 0, explored, stopwatch.ElapsedMilliseconds);
+            return SearchResult.NotFound(explored, stopwatch.ElapsedMilliseconds);
         }
         
         double [,]  distance = new double[grid.Height, grid.Width];
@@ -59,7 +58,7 @@ public class Dijkstra: IPathFinder
             }
         }
         
-        return new SearchResult(false, new List<Point>(), 0, explored, stopwatch.ElapsedMilliseconds);
+        return SearchResult.NotFound(explored, stopwatch.ElapsedMilliseconds);
     }
 
     private static void FillWithInfinityAndStartWith0(double[,] distance)
@@ -87,15 +86,13 @@ public class Dijkstra: IPathFinder
     private static double StepCost(Grid grid, Point from, Point to)
     {
         bool isDiagonal = from.Row != to.Row && from.Column != to.Column;
-        double multiplyFactor;
+        double multiplyFactor = MovementModeExtensions.OrthogonalFactor;
+        
         if (isDiagonal)
         {
-            multiplyFactor = DiagonalFactor;
+            multiplyFactor = MovementModeExtensions.DiagonalFactor;
         }
-        else
-        {
-            multiplyFactor = 1;
-        }
+        
         return grid.GetCost(to) * multiplyFactor;
     }
 }

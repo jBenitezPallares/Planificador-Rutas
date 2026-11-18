@@ -16,5 +16,10 @@ public class SearchResult
         ExplorationOrder = explorationOrder;
         ElapsedMs = ms;
     }
+    
+    public static SearchResult NotFound(IReadOnlyList<Point> explored, long elapsedMs)
+    {
+        return new SearchResult(false, new List<Point>(), 0, explored, elapsedMs);
+    }
 }
 

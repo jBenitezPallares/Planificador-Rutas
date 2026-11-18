@@ -3,7 +3,6 @@
 public class Grid
 {
     private readonly CellType[,] _grid;
-
     public int Width { get; }
     public int Height { get; }
 
@@ -61,6 +60,19 @@ public class Grid
         {
             _grid[point.Row, point.Column] = cell;
         }
+    }
+    
+    public double StepCost(Point from, Point to)
+    {
+        bool isDiagonal = from.Row != to.Row && from.Column != to.Column;
+        double multiplyFactor = MovementModeExtensions.OrthogonalFactor;
+
+        if (isDiagonal)
+        {
+            multiplyFactor = MovementModeExtensions.DiagonalFactor;
+        }
+
+        return GetCost(to) * multiplyFactor;
     }
 
     public int GetCost(Point point)

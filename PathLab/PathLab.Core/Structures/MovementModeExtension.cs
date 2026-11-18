@@ -1,4 +1,4 @@
-﻿namespace PathLab.Core;
+﻿namespace PathLab.Core.Structures;
 
 public static class MovementModeExtensions
 {

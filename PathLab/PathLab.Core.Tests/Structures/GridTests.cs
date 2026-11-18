@@ -1,4 +1,6 @@
-﻿namespace PathLab.Core.Tests;
+﻿using PathLab.Core.Structures;
+
+namespace PathLab.Core.Tests.Structures;
 
 [TestClass]
 public class GridTests

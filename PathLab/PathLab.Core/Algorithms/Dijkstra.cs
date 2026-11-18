@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using PathLab.Core.Abstractions;
+using PathLab.Core.Structures;
 
-namespace PathLab.Core;
+namespace PathLab.Core.Algorithms;
 
 public class Dijkstra : PathFinderBase
 {

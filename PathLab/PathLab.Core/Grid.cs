@@ -20,7 +20,9 @@ public class Grid
         foreach ((int rowStep, int columnStep) in MovementModeExtensions.GetOffsets(mode))
         {
             Point candidate = new Point(point.Row + rowStep, point.Column + columnStep);
-            if (Contains(candidate) && GetCellType(candidate) != CellType.Wall)
+            if (Contains(candidate)
+                && GetCellType(candidate) != CellType.Wall
+                && !CutsCorner(point, rowStep, columnStep))
             {
                 neighbors.Add(candidate);
             }
@@ -33,6 +35,19 @@ public class Grid
         if (point.Row < 0 || point.Row >= Height || point.Column < 0 || point.Column >= Width)
             return false;
         return true;
+    }
+    
+    private bool CutsCorner(Point point, int rowStep, int columnStep)
+    {
+        bool isDiagonal = rowStep != 0 && columnStep != 0;
+        if (!isDiagonal)
+            return false;
+
+        Point verticalCorner = new Point(point.Row + rowStep, point.Column);
+        Point horizontalCorner = new Point(point.Row, point.Column + columnStep);
+
+        return GetCellType(verticalCorner) == CellType.Wall
+               && GetCellType(horizontalCorner) == CellType.Wall;
     }
 
     private CellType GetCellType(Point point)

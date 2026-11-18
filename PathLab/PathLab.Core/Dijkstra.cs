@@ -2,7 +2,7 @@
 
 namespace PathLab.Core;
 
-public class Dijkstra: IPathFinder
+public class Dijkstra : IPathFinder
 {
     private readonly MovementMode _movementMode;
 
@@ -18,31 +18,34 @@ public class Dijkstra: IPathFinder
 
         if (!grid.Contains(goal))
             throw new ArgumentOutOfRangeException(nameof(goal), goal, "El punto de destino está fuera de la grilla");
-        
+
         Stopwatch stopwatch = Stopwatch.StartNew();
         List<Point> explored = new List<Point>();
         if (grid.IsWall(start) || grid.IsWall(goal))
         {
             return SearchResult.NotFound(explored, stopwatch.ElapsedMilliseconds);
         }
-        
-        double [,]  distance = new double[grid.Height, grid.Width];
-        bool [,] visited = new bool[grid.Height, grid.Width];
-        Point? [,] previous = new Point? [grid.Height, grid.Width];
+
+        double[,] distance = new double[grid.Height, grid.Width];
+        bool[,] visited = new bool[grid.Height, grid.Width];
+        Point?[,] previous = new Point? [grid.Height, grid.Width];
         FillWithInfinity(distance);
-        distance [start.Row, start.Column] = 0;
-        
-        MinHeap<(Point point, double cost)> queue = new MinHeap<(Point point, double cost)>(Comparer<(Point point, double cost)>.Create((a,b) => a.cost.CompareTo(b.cost)));
-        queue.Insert((start,0));
+        distance[start.Row, start.Column] = 0;
+
+        MinHeap<(Point point, double cost)> queue =
+            new MinHeap<(Point point, double cost)>(
+                Comparer<(Point point, double cost)>.Create((a, b) => a.cost.CompareTo(b.cost)));
+        queue.Insert((start, 0));
 
         while (!queue.IsEmpty)
         {
             (Point current, double cost) = queue.ExtractMin();
-            
-            if(visited[current.Row, current.Column])
+
+            if (visited[current.Row, current.Column])
             {
                 continue;
             }
+
             visited[current.Row, current.Column] = true;
             explored.Add(current);
 
@@ -59,11 +62,11 @@ public class Dijkstra: IPathFinder
                 {
                     distance[neighbor.Row, neighbor.Column] = newCost;
                     previous[neighbor.Row, neighbor.Column] = current;
-                    queue.Insert((neighbor, distance [neighbor.Row, neighbor.Column]));
+                    queue.Insert((neighbor, distance[neighbor.Row, neighbor.Column]));
                 }
             }
         }
-        
+
         return SearchResult.NotFound(explored, stopwatch.ElapsedMilliseconds);
     }
 
@@ -93,12 +96,12 @@ public class Dijkstra: IPathFinder
     {
         bool isDiagonal = from.Row != to.Row && from.Column != to.Column;
         double multiplyFactor = MovementModeExtensions.OrthogonalFactor;
-        
+
         if (isDiagonal)
         {
             multiplyFactor = MovementModeExtensions.DiagonalFactor;
         }
-        
+
         return grid.GetCost(to) * multiplyFactor;
     }
 }

@@ -23,7 +23,7 @@ public class Dijkstra: IPathFinder
         double [,]  distance = new double[grid.Height, grid.Width];
         bool [,] visited = new bool[grid.Height, grid.Width];
         Point? [,] previous = new Point? [grid.Height, grid.Width];
-        FillWithInfinityAndStartWith0(distance);
+        FillWithInfinity(distance);
         distance [start.Row, start.Column] = 0;
         
         MinHeap<(Point point, double cost)> queue = new MinHeap<(Point point, double cost)>(Comparer<(Point point, double cost)>.Create((a,b) => a.cost.CompareTo(b.cost)));
@@ -61,7 +61,7 @@ public class Dijkstra: IPathFinder
         return SearchResult.NotFound(explored, stopwatch.ElapsedMilliseconds);
     }
 
-    private static void FillWithInfinityAndStartWith0(double[,] distance)
+    private static void FillWithInfinity(double[,] distance)
     {
         for (int row = 0; row < distance.GetLength(0); row++)
         for (int column = 0; column < distance.GetLength(1); column++)

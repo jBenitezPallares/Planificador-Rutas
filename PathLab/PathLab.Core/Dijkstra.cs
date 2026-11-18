@@ -1,4 +1,6 @@
-﻿namespace PathLab.Core;
+﻿using System.Diagnostics;
+
+namespace PathLab.Core;
 
 public class Dijkstra: IPathFinder
 {
@@ -12,10 +14,11 @@ public class Dijkstra: IPathFinder
 
     public SearchResult Find(Grid grid, Point start, Point goal)
     {
+        Stopwatch stopwatch = Stopwatch.StartNew();
         List<Point> explored = new List<Point>();
         if (grid.IsWall(start) || grid.IsWall(goal))
         {
-            return new SearchResult(false, new List<Point>(), 0, explored, 0);
+            return new SearchResult(false, new List<Point>(), 0, explored, stopwatch.ElapsedMilliseconds);
         }
         
         double [,]  distance = new double[grid.Height, grid.Width];
@@ -40,7 +43,7 @@ public class Dijkstra: IPathFinder
 
             if (current == goal)
             {
-                return new SearchResult(true, BuildPath(previous, goal), cost, explored, 0);
+                return new SearchResult(true, BuildPath(previous, goal), cost, explored, stopwatch.ElapsedMilliseconds);
             }
 
             foreach (Point neighbor in grid.GetNeighbors(current, _movementMode))
@@ -56,7 +59,7 @@ public class Dijkstra: IPathFinder
             }
         }
         
-        return new SearchResult(false, new List<Point>(), 0, explored, 0);
+        return new SearchResult(false, new List<Point>(), 0, explored, stopwatch.ElapsedMilliseconds);
     }
 
     private static void FillWithInfinityAndStartWith0(double[,] distance)

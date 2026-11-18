@@ -48,14 +48,13 @@ public class PathFinderTests
     [TestMethod]
     public void Find_LargeOpenMap_ReportsPositiveElapsedTime()
     {
-        // Big enough that the search takes more than one millisecond on any machine.
         Grid grid = new Grid(300, 300);
 
         IPathFinder finder = new Dijkstra(MovementMode.FourDirections);
         SearchResult result = finder.Find(grid, new Point(0, 0), new Point(299, 299));
 
         Assert.IsTrue(result.Found);
-        Assert.IsTrue(result.ElapsedMs > 0);
+        Assert.IsGreaterThan(0, result.ElapsedMs);
     }
 
     [TestMethod]
@@ -66,6 +65,68 @@ public class PathFinderTests
         IPathFinder finder = new Dijkstra(MovementMode.FourDirections);
         SearchResult result = finder.Find(grid, new Point(0, 0), new Point(2, 2));
 
-        Assert.IsTrue(result.ElapsedMs >= 0);
+        Assert.IsGreaterThanOrEqualTo(0, result.ElapsedMs);
+    }
+
+    [TestMethod]
+    public void Find_NoPathBetweenStartAndGoal_ReturnsNotFound()
+    {
+        Grid grid = new Grid(5,4);
+        List<Point> wallPoints = new List<Point>(new[]
+        {
+            new Point(1, 0), new Point(1, 1), new Point(1, 2),
+            new Point(1, 3), new Point(1, 4)
+        });
+        foreach (Point wall in wallPoints)
+        {
+            grid.SetCell(wall, CellType.Wall);
+        }
+        
+        IPathFinder finder = new Dijkstra(MovementMode.EightDirections);
+        SearchResult result = finder.Find(grid, new Point(0, 0), new Point(3, 4));
+        
+        Assert.IsFalse(result.Found);
+        Assert.AreEqual(0, result.Cost);
+    }
+
+    [TestMethod]
+    public void Find_StartEqualsGoal_ReturnsCostZeroAndSingleCellPath()
+    {
+        Grid grid = new Grid(5,4);
+        
+        IPathFinder finder = new Dijkstra(MovementMode.EightDirections);
+        SearchResult result = finder.Find(grid, new Point(0, 0), new Point(0, 0));
+        
+        Assert.IsTrue(result.Found);
+        Assert.AreEqual(0, result.Cost);
+        Assert.HasCount(1, result.Path);
+        Assert.AreEqual(new Point(0, 0), result.Path[0]);
+    }
+
+    [TestMethod]
+    public void Find_StartIsWall_ReturnsNotFound()
+    {
+        Grid grid = new Grid(5,4);
+        grid.SetCell(new Point(0,0), CellType.Wall);
+        
+        IPathFinder finder = new Dijkstra(MovementMode.EightDirections);
+        SearchResult result = finder.Find(grid, new Point(0, 0), new Point(3, 4));
+        
+        Assert.IsFalse(result.Found);
+        Assert.AreEqual(0, result.Cost);
+        Assert.IsEmpty(result.Path);
+    }
+    
+    [TestMethod]
+    public void Find_GoalIsWall_ReturnsNotFound(){
+        Grid grid = new Grid(5,4);
+        grid.SetCell(new Point(3,4), CellType.Wall);
+        
+        IPathFinder finder = new Dijkstra(MovementMode.EightDirections);
+        SearchResult result = finder.Find(grid, new Point(0, 0), new Point(3, 4));
+        
+        Assert.IsFalse(result.Found);
+        Assert.AreEqual(0, result.Cost);
+        Assert.IsEmpty(result.Path);
     }
 }

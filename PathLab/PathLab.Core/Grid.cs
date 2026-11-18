@@ -1,10 +1,14 @@
 ﻿namespace PathLab.Core;
 
 public class Grid
+
 {
     private readonly int _width;
     private readonly int _height;
     private readonly CellType[,] _grid;
+
+    public int Width => _width;
+    public int  Height => _height;
 
     public Grid(int width, int height)
     {

@@ -1,4 +1,6 @@
-﻿namespace PathLab.Core;
+﻿using PathLab.Core.Structures;
+
+namespace PathLab.Core.Algorithms;
 
 public class SearchResult
 {

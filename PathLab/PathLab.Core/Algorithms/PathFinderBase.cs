@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using PathLab.Core.Algorithms;
+using PathLab.Core.Structures;
 
-namespace PathLab.Core;
+namespace PathLab.Core.Abstractions;
 
 public abstract class PathFinderBase : IPathFinder
 {

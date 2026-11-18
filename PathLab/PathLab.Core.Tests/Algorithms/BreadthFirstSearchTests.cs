@@ -1,4 +1,8 @@
-﻿namespace PathLab.Core.Tests;
+﻿using PathLab.Core.Abstractions;
+using PathLab.Core.Algorithms;
+using PathLab.Core.Structures;
+
+namespace PathLab.Core.Tests.Algorithms;
 
 [TestClass]
 public class BreadthFirstSearchTests: PathFinderContractTests

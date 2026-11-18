@@ -46,4 +46,24 @@ public class Grid
             _grid[point.Row, point.Column] = cell;
         }
     }
+
+    public int GetCost(Point point)
+    {
+        EnsureContains(point);
+        return CellTypeExtensions.GetCost(_grid[point.Row, point.Column]);
+    }
+
+    public bool IsWall(Point point)
+    {
+        EnsureContains(point);
+        return _grid[point.Row, point.Column] == CellType.Wall;
+    }
+
+    private void EnsureContains(Point point)
+    {
+        if (!Contains(point))
+        {
+            throw new ArgumentOutOfRangeException(nameof(point), point, "El punto está fuera de la grilla");
+        }
+    }
 }

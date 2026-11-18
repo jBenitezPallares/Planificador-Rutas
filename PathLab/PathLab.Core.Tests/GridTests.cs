@@ -174,6 +174,22 @@ public class GridTests
             new Point(0, 1), new Point(1, 0), new Point(1, 2), new Point(2, 1));
     }
 
+    [TestMethod]
+    public void GetCost_PointOutsideGrid_ThrowsException()
+    {
+        Grid grid = new(3, 3);
+
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => grid.GetCost(new Point(3, 0)));
+    }
+
+    [TestMethod]
+    public void IsWall_PointOutsideGrid_ThrowsException()
+    {
+        Grid grid = new(3, 3);
+
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => grid.IsWall(new Point(0, -1)));
+    }
+
     private static void AssertNeighbors(Grid grid, Point point, MovementMode mode, params Point[] expected)
     {
         List<Point> neighbors = grid.GetNeighbors(point, mode).ToList();

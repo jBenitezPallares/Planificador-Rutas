@@ -76,8 +76,8 @@ public abstract class PathFinderContractTests
     {
         Grid grid = BuildHandMadeMap();
         grid.SetCell(new Point(0,0), CellType.Wall);
-        
         IPathFinder finder = CreateFinder(MovementMode.FourDirections);
+        
         SearchResult result = finder.Find(grid, new Point(0, 0), new Point(3, 4));
         
         Assert.IsFalse(result.Found);
@@ -89,8 +89,8 @@ public abstract class PathFinderContractTests
     public void Find_GoalIsWall_ReturnsNotFound(){
         Grid grid = BuildHandMadeMap();
         grid.SetCell(new Point(3,4), CellType.Wall);
-        
         IPathFinder finder = CreateFinder(MovementMode.FourDirections);
+        
         SearchResult result = finder.Find(grid, new Point(0, 0), new Point(3, 4));
         
         Assert.IsFalse(result.Found);
@@ -102,8 +102,8 @@ public abstract class PathFinderContractTests
     public void Find_LargeOpenMap_ReportsPositiveElapsedTime()
     {
         Grid grid = new Grid(300, 300);
-
         IPathFinder finder = CreateFinder(MovementMode.FourDirections);
+        
         SearchResult result = finder.Find(grid, new Point(0, 0), new Point(299, 299));
 
         Assert.IsTrue(result.Found);
@@ -114,8 +114,8 @@ public abstract class PathFinderContractTests
     public void Find_SmallMap_ReportsNonNegativeElapsedTime()
     {
         Grid grid = new Grid(3, 3);
-
         IPathFinder finder = CreateFinder(MovementMode.FourDirections);
+        
         SearchResult result = finder.Find(grid, new Point(0, 0), new Point(2, 2));
 
         Assert.IsGreaterThanOrEqualTo(0, result.ElapsedMs);

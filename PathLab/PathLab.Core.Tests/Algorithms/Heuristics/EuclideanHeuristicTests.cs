@@ -12,7 +12,12 @@ public class EuclideanHeuristicTests : HeuristicContractTests
     [TestMethod]
     public void Estimate_ThreeFourFiveTriangle_ReturnsFive()
     {
-        Assert.AreEqual(5, CreateHeuristic().Estimate(new Point(0, 0), new Point(3, 4)));
+        Point  from = new Point(0, 0);
+        Point goal = new Point(3, 4);
+        
+        double estimate = CreateHeuristic().Estimate(from, goal);
+        
+        Assert.AreEqual(5, estimate);
     }
     
     [TestMethod]

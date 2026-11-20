@@ -22,8 +22,8 @@ public class DijkstraTests: PathFinderContractTests
         {
             grid.SetCell(wall, CellType.Wall);
         }
-        
         IPathFinder finder = CreateFinder(MovementMode.EightDirections);
+        
         SearchResult result = finder.Find(grid, new Point(0, 0), new Point(3, 4));
         
         Assert.IsTrue(result.Found);

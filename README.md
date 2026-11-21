@@ -10,7 +10,7 @@ Librería en C# que busca el camino más corto sobre un mapa de grilla y **compa
 
 - **Grilla** con celdas de distinto costo y movimiento en 4 u 8 direcciones.
 - **Tres algoritmos de búsqueda** con la misma interfaz (`IPathFinder`): BFS, Dijkstra y A\*.
-- **Tres heurísticas** para A\*: Manhattan, euclídea y octil.
+- **Heurísticas** para A\*: Manhattan, euclídea y octil, más una heurística cero que convierte A\* en Dijkstra.
 - **Generador de mapas aleatorios** con porcentajes configurables de muros, barro y agua.
 - **Min-heap binario propio** con comparador.
 - **Tests** con MSTest, entre ellos un test de propiedades sobre 200 mapas aleatorios.
@@ -35,7 +35,7 @@ Todos implementan `IPathFinder.Find(grid, start, goal)` y devuelven un `SearchRe
 | Algoritmo | Qué garantiza | Estructura que usa | Complejidad |
 |---|---|---|---|
 | **BFS** | Camino con **menos celdas**, ignorando los costos | Cola común | O(V) |
-| **Dijkstra** | Camino de **costo mínimo** | `MinHeap` propio | O(V log V) |
+| **Dijkstra** | Camino de **costo mínimo** | `MinHeap` propio (es A\* con heurística cero) | O(V log V) |
 | **A\*** | Camino de **costo mínimo**, explorando menos | `MinHeap` propio + heurística | O(V log V) en el peor caso |
 
 (V es la cantidad de celdas.)
@@ -48,7 +48,7 @@ Dijkstra ordena las celdas pendientes solo por el **costo acumulado** `g` desde 
 
 A\* ordena por `f = g + h`, donde `h` es una **estimación** del costo que falta hasta el destino. Con eso, las celdas que van en dirección al objetivo tienen un `f` menor y se expanden primero, y las que se alejan quedan en la cola sin explorarse.
 
-Para que A\* siga siendo óptimo, la heurística tiene que ser **admisible** (nunca sobreestima el costo real) y, como cada celda se cierra una sola vez, **consistente**. Si `h` vale siempre 0, A\* se reduce exactamente a Dijkstra.
+Para que A\* siga siendo óptimo, la heurística tiene que ser **admisible** (nunca sobreestima el costo real) y, como cada celda se cierra una sola vez, **consistente**. Si `h` vale siempre 0, A\* se reduce exactamente a Dijkstra, y así está hecho el código: `Dijkstra` hereda de `AStar` con `ZeroHeuristic`, una heurística que siempre devuelve 0.
 
 ### Heurísticas
 
@@ -57,6 +57,7 @@ Para que A\* siga siendo óptimo, la heurística tiene que ser **admisible** (nu
 | **Manhattan** | `dr + dc` | 4 direcciones (exacta en un mapa libre) |
 | **Octil** | `max(dr, dc) + (1,414 - 1) × min(dr, dc)` | 8 direcciones (exacta en un mapa libre) |
 | **Euclídea** | `√(dr² + dc²)` | Ambos modos, pero está menos informada y explora más |
+| **Cero** | `0` | Ninguno en particular: es lo que convierte a A\* en Dijkstra |
 
 Manhattan **no** se debe usar con 8 direcciones: una diagonal avanza dos unidades por 1,414 de costo, así que sobreestima y A\* podría devolver un camino que no es el óptimo. `HeuristicFactory.CreateFor(mode)` elige la correcta para cada modo.
 
@@ -100,7 +101,7 @@ PathLab/
 ├── PathLab.Core/               Núcleo, sin dependencias de interfaz
 │   ├── Abstractions/           Contratos: IPathFinder, IHeuristic, IMapGenerator
 │   ├── Algorithms/             PathFinderBase, Dijkstra, BreadthFirstSearch, AStar, SearchResult
-│   │   └── Heuristics/         Manhattan, euclídea, octil y HeuristicFactory
+│   │   └── Heuristics/         Manhattan, euclídea, octil, cero y HeuristicFactory
 │   ├── Generators/             RandomMapGenerator y MapGenerationOptions
 │   └── Structures/             Grid, MinHeap, Point, CellType, MovementMode
 └── PathLab.Core.Tests/         Tests del núcleo, con la misma estructura de carpetas

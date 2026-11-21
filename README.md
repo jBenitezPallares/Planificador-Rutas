@@ -13,7 +13,7 @@ Librería en C# que busca el camino más corto sobre un mapa de grilla y **compa
 - **Tres heurísticas** para A\*: Manhattan, euclídea y octil.
 - **Generador de mapas aleatorios** con porcentajes configurables de muros, barro y agua.
 - **Min-heap binario propio** con comparador.
-- **99 tests** con MSTest, entre ellos un test de propiedades sobre 200 mapas aleatorios.
+- **Tests** con MSTest, entre ellos un test de propiedades sobre 200 mapas aleatorios.
 
 ## Modelo del mapa
 

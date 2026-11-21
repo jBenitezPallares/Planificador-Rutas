@@ -24,7 +24,7 @@ public class Dijkstra : PathFinderBase
 
         while (!queue.IsEmpty)
         {
-            (Point current, double cost) = queue.ExtractMin();
+            (Point current, _) = queue.ExtractMin();
 
             if (visited[current.Row, current.Column])
             {
@@ -36,7 +36,7 @@ public class Dijkstra : PathFinderBase
 
             if (current == goal)
             {
-                return new SearchResult(true, BuildPath(previous, goal), cost, explored, stopwatch.ElapsedMilliseconds);
+                return new SearchResult(true, BuildPath(previous, goal), distance [goal.Row, goal.Column], explored, stopwatch.ElapsedMilliseconds);
             }
 
             foreach (Point neighbor in grid.GetNeighbors(current, MovementMode))

@@ -10,7 +10,7 @@ Librería en C# que busca el camino más corto sobre un mapa de grilla y **compa
 
 - **Grilla** con celdas de distinto costo y movimiento en 4 u 8 direcciones.
 - **Tres algoritmos de búsqueda** con la misma interfaz (`IPathFinder`): BFS, Dijkstra y A\*.
-- **Tres heurísticas** para A\*: Manhattan, euclídea y octil.
+- **Heurísticas** para A\*: Manhattan, euclídea y octil, más una heurística cero que convierte A\* en Dijkstra.
 - **Generador de mapas aleatorios** con porcentajes configurables de muros, barro y agua.
 - **Min-heap binario propio** con comparador.
 - **Tests** con MSTest, entre ellos un test de propiedades sobre 200 mapas aleatorios.

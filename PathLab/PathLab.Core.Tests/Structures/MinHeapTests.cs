@@ -11,7 +11,7 @@ public class MinHeapTests
         Random random = new Random(42);
         MinHeap<int> heap = new MinHeap<int>(Comparer<int>.Default);
         List<int> expected = new List<int>();
-        for (int i = 0; i < 100; i++)
+        for (int k = 0; k < 100; k++)
         {
             int value = random.Next();
             expected.Add(value);

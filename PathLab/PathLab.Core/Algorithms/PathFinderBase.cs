@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using PathLab.Core.Algorithms;
+using PathLab.Core.Abstractions;
 using PathLab.Core.Structures;
 
-namespace PathLab.Core.Abstractions;
+namespace PathLab.Core.Algorithms;
 
 /// <summary>
 /// The common skeleton of every path finder: it checks the points, starts the clock and

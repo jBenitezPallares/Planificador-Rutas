@@ -4,14 +4,14 @@
 
 Librería en C# que busca el camino más corto sobre un mapa de grilla y **compara algoritmos** (BFS, Dijkstra y A\*), midiendo cuántas celdas explora cada uno. El foco del proyecto es mostrar estructuras de datos y algoritmos **propios**: el min-heap y la grilla están implementados a mano, sin `PriorityQueue<T>` ni librerías de grafos.
 
-> **Estado:** el núcleo (estructuras, algoritmos, heurísticas y generador aleatorio) está terminado y probado. La interfaz web, el generador de laberintos, la persistencia en JSON y los benchmarks están pendientes (ver [Estado del proyecto](#estado-del-proyecto)).
+> **Estado:** el núcleo (estructuras, algoritmos, heurísticas y generadores de mapas) está terminado y probado. La interfaz web, la persistencia en JSON y los benchmarks están pendientes (ver [Estado del proyecto](#estado-del-proyecto)).
 
 ## Qué incluye hoy
 
 - **Grilla** con celdas de distinto costo y movimiento en 4 u 8 direcciones.
 - **Tres algoritmos de búsqueda** con la misma interfaz (`IPathFinder`): BFS, Dijkstra y A\*.
 - **Heurísticas** para A\*: Manhattan, euclídea y octil, más una heurística cero que convierte A\* en Dijkstra.
-- **Generador de mapas aleatorios** con porcentajes configurables de muros, barro y agua.
+- **Generadores de mapas** con la misma interfaz (`IMapGenerator`): uno aleatorio, con porcentajes configurables de muros, barro y agua, y uno de **laberintos**, que siempre deja camino entre las dos esquinas.
 - **Min-heap binario propio** con comparador.
 - **Tests** con MSTest, entre ellos un test de propiedades sobre 200 mapas aleatorios.
 
@@ -102,7 +102,7 @@ PathLab/
 │   ├── Abstractions/           Contratos: IPathFinder, IHeuristic, IMapGenerator
 │   ├── Algorithms/             PathFinderBase, Dijkstra, BreadthFirstSearch, AStar, SearchResult
 │   │   └── Heuristics/         Manhattan, euclídea, octil, cero y HeuristicFactory
-│   ├── Generators/             RandomMapGenerator y MapGenerationOptions
+│   ├── Generators/             RandomMapGenerator, MazeMapGenerator y MapGenerationOptions
 │   └── Structures/             Grid, MinHeap, Point, CellType, MovementMode
 └── PathLab.Core.Tests/         Tests del núcleo, con la misma estructura de carpetas
 ```
@@ -122,6 +122,7 @@ Los tests cubren, entre otras cosas:
 - Que A\* y Dijkstra den el **mismo costo** y que A\* explore **menos celdas**.
 - La admisibilidad de cada heurística contra el costo real de Dijkstra.
 - El **test de propiedades**: sobre 200 mapas aleatorios (semillas 0 a 199), en 4 y en 8 direcciones, A\* y Dijkstra coinciden en `Found` y en el costo.
+- Los generadores comparten una clase base de tests (`MapGeneratorContractTests`): mismo mapa con la misma semilla, mapas distintos con semillas distintas y tamaño pedido. El laberinto suma que **no tiene ciclos ni celdas aisladas** (la cantidad de celdas libres es la de un árbol), que todas son alcanzables desde una esquina y que las dos esquinas están conectadas.
 - Las estructuras: `MinHeap` (los valores salen ordenados), vecinos de la grilla y la regla de no cortar esquinas.
 
 ## Estado del proyecto
@@ -129,7 +130,7 @@ Los tests cubren, entre otras cosas:
 - [x] `MinHeap`, `Grid`, BFS y Dijkstra con tests
 - [x] A\*, heurísticas y test de propiedades
 - [x] Generador de mapas aleatorios
-- [ ] Generador de laberintos
+- [x] Generador de laberintos
 - [ ] Guardar y cargar mapas en JSON
 - [ ] Interfaz web con Blazor (edición de mapa, animación y modo comparar)
 - [ ] Benchmarks (50×50, 100×100 y 200×200) y capturas
